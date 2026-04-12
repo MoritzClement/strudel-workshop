@@ -3,39 +3,44 @@ adapted and corrected from [heroheman](https://gist.github.com/heroheman)
 ## 1. Grundlegende Syntax und Muster
 ### a. Basic-Syntax
 
-| Zeichen | Funktion         | Beispiel     | Beschreibung                                                                                    |
-| :-----: | ---------------- | ------------ | ----------------------------------------------------------------------------------------------- |
-|  `s()`  | Sample abspielen | `s("bd")`    | Spielt das Bassdrum-Sample                                                                      |
-|  `n()`  | Noten abspielen  | `n("c4")`    | Spielt die Note C4                                                                              |
-|   //    | Kommentar        | `//comment`  | Kommentar betrifft aktuelle Zeile                                                               |
-|   ""    | Mini-Notation    | `"c (g,g)"`  | besondere Notation für Musik                                                                    |
-|   ''    | Regulärer String | `'a string'` | ein normaler String                                                                             |
-|   $:    | Parallel-Start   | `s("bd")`    | Wird verwendet, um mehrere Patterns gleichzeitig im REPL abzuspielen.<br>Stummschalten mit `_$` |
+|       Zeichen       | Funktion            | Beispiel                           | Beschreibung                                                                                    |
+| :-----------------: | ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------- |
+|        `//`         | Kommentar           | `//comment`                        | Kommentar betrifft aktuelle Zeile                                                               |
+|   `""`<br>` `` `    | Mini-Notation       | `"c [g g]"`                        | besondere Notation für Musik,<br>Backticks für mehrere Zeilen                                   |
+|        `''`         | Regulärer String    | `'a string'`                       | ein normaler String                                                                             |
+|        `$:`         | Parallel-Start      | `s("bd")`                          | Wird verwendet, um mehrere Patterns gleichzeitig im REPL abzuspielen.<br>Stummschalten mit `_$` |
+|        `s()`        | Sample abspielen    | `s("bd")`                          | Spielt das Bassdrum-Sample                                                                      |
+|      `note()`       | Noten abspielen     | `note("c4")`                       | Spielt die Note C4                                                                              |
+|    `n().scale()`    | Index und Tonleiter | `n("0 1").scale("c:minor")`        | Spielt ersten und zweiten Ton aus C-Moll                                                        |
+| `chord().voicing()` | Akkordname          | `chord("C7").voicing()`            | Spielt einen Akkord                                                                             |
+|     `n().set()`     | Index und Akkord    | n("0 1").set(chord("C").voicing()) | Spielt Töne aus einem Akkord                                                                    |
 ### b.  Mini-Notation
 Mini-Notation kann verwendet werden, um **zeitliche Abfolgen** von musikalischen Events anzugeben, egal ob Töne, Drums, Effekt-Parameter...
 Immer in doppelten Anführungszeichen verwenden!
 Beispiel: `"0 2 4 <[6,8] [7,9]>"`
 
-| Zeichen | Funktion       | Beispiel       | Beschreibung                                    |
-| :-----: | -------------- | -------------- | ----------------------------------------------- |
-|  `< >`  | Sequenz        | `<a b c>`      | Spielt `a`, dann `b`, dann `c`                  |
-|  `[ ]`  | Sub-sequenz    | `[bd [hh hh]]` | Unterteilt Zeit in 0,5 bd, 0,25 hh, 0,25 hh     |
-|   `/`   | Division       | `bd/2`         | x-mal langsamer                                 |
-|   `*`   | Multiplikation | `sd*4`         | x-mal schneller                                 |
-|   `!`   | Wiederholung   | `sd!3`         | Wählt 3 Ereignisse aus dem Pattern zufällig aus |
-|   `~`   | Pause / Stille | `<a ~ b>`      | Spielt `a`, dann Pause, dann `b`                |
-|   `,`   | Parallel       | `a,b`          | Spielt a und b gleichzeitig                     |
-|  `\|`   | Zufällige Wahl | `<a\|b\|c>`    | Wählt zufällig eins von `a`, `b` oder `c`       |
-|   `?`   | Zufall         | `sd?`          | zu 50 % sd spielen (`sd?0.1` für 10%)           |
-|   `@`   | Verlängerung   | `bd@2`         | verdoppelt zeitliche Länge von bd               |
-|  `()`   | Euklidisch     | `bd(3,8)`      | Verteilt 3 Schläge gleichmäßig über 8           |
+| Zeichen | Funktion          | Beispiel       | Beschreibung                                                                 |
+| :-----: | ----------------- | -------------- | ---------------------------------------------------------------------------- |
+|  `< >`  | Sequenz           | `<a b c>`      | Spielt `a`, dann `b`, dann `c`<br>Entspricht `[a,b,c]/3`                     |
+|  `[ ]`  | Sub-sequenz       | `[bd [hh hh]]` | Unterteilt Zeit rekursiv in `0,5 bd, 0,25 hh, 0,25 hh`                       |
+|   `*`   | Wiederholung      | `sd*3`         | Spielt Snaredrum 3-mal in der Zeit von 1-Mal,<br>entspricht `[sd sd sd]`     |
+|   `/`   | Division          | `bd/2`         | Spielt Basedrum 1-mal in der Zeit von 2-Mal,<br>entspricht `bd*0.5`          |
+|   `!`   | Wiederholung      | `sd!3`         | Spielt Snaredrum 3-mal in gleicher Geschwindigkeit,<br>entspricht `sd sd sd` |
+|   `~`   | Pause / Stille    | `<a ~ b>`      | Spielt `a`, dann Pause, dann `b`                                             |
+|   `,`   | Parallel          | `a, b`         | Spielt a und b gleichzeitig                                                  |
+|  `\|`   | Zufällige Wahl    | `<a\|b\|c>`    | Wählt zufällig eins von `a`, `b` oder `c`                                    |
+|   `?`   | Boolescher Zufall | `sd?`          | zu 50 % sd spielen (`sd?0.1` für 10%)                                        |
+|   `@`   | Verlängerung      | `bd@2`         | verdoppelt zeitliche Länge von bd                                            |
+|  `()`   | Euklidisch        | `bd(3,8)`      | Verteilt 3 Schläge gleichmäßig über 8                                        |
 
 ---
 
 ## 2. Samples und Instrumente
 
 Strudel hat eine Reihe von integrierten Samples und kann auch externe Pakete laden.
-Auf diese kann mit `sound("*Soundname*")` zugegriffen werden.
+Auf diese kann mit `s("*Soundname*")` zugegriffen werden.
+Samples können im Seitenmenü gefunden werden.
+### Drum-Komponenten
 
 | Shortcut | Sample         | Beschreibung         |
 | :------: | :------------- | :------------------- |
@@ -49,16 +54,15 @@ Auf diese kann mit `sound("*Soundname*")` zugegriffen werden.
 |   `lt`   | `low tom`      | Low Tom              |
 |   `mt`   | `mid tom`      | Mid Tom              |
 |   `ht`   | `high tom`     | High Tom             |
-
-`bank`
-**Drum-Samples:**
+### Drumsets
+**Drum-Samples** können mit `.bank(...)` gewählt werden:
 - `AkaiLinn`
 - `RhythmAce`
 - `RolandTR808`
 - `RolandTR909`
 - `RolandTR707`
 - `ViscoSpaceDrum`
-
+### andere Samples
 **Allgemeine Instrumente:**
 * `s("synth")`: Ein klassischer analoger Synthesizer.
 * `s("fm")`: Ein FM-Synthesizer.
@@ -78,7 +82,7 @@ Auf diese kann mit `sound("*Soundname*")` zugegriffen werden.
 
 ## 3. Effekte und Parameter-Modifikatoren
 
-Effekte werden mit der Punkt-Syntax an ein Pattern angehängt.
+Effekte werden mit der Punkt-Syntax an ein Pattern angehängt. Achtung, diese sind zum Teil global ohne Nutzung von `orbit()`. Siehe 
 
 | Funktion      | Parameter                    | Beispiel                    | Beschreibung                                  |
 | :------------ | :--------------------------- | :-------------------------- | :-------------------------------------------- |
@@ -92,8 +96,7 @@ Effekte werden mit der Punkt-Syntax an ein Pattern angehängt.
 | `crush()`     | `1` - `16`                   | `.crush(8)`                 | Reduziert die Bit-Qualität (Bit-Crusher)      |
 | `phaser()`    | Frequenz                     | `.phaser(4)`                | Phaser-Effekt                                 |
 | `speed()`     | Wert                         | `.speed(.5)`                | Ändert die Abspielgeschwindigkeit von Samples |
-| `n().scale()` | Index und Tonleiter          | `n("0 1").scale("c:minor")` | Spielt ersten und zweiten Ton aus C-Moll      |
-| `chord()`     | Akkordname                   | `chord("Cmaj7")`            | Spielt einen Akkord                           |
+
 
 ---
 
@@ -119,7 +122,7 @@ Effekte werden mit der Punkt-Syntax an ein Pattern angehängt.
 ## 5. Sonstiges
 ### Start/ Stopp
 - **Starten & Aktualisieren** mit `STRG + ENTER`
-- Stoppen mit `STRG + .`
+- Stoppen mit `STRG + PUNKT`
 ### eigene Funktionen / Variablen
 ```
 const effectChain = register('effectChain', (pat) => pat
@@ -131,7 +134,7 @@ const effectChain = register('effectChain', (pat) => pat
 note("a3 c#4 e4 a4").effectChain()
 ```
 ### Visualisierung
-Versucht `.pianoroll()`, `` oder `.punchcard()`, um euch die Events graphisch anzeigen zu lassen.
+Versucht `.pianoroll()` oder `.punchcard()`, um euch die Events graphisch anzeigen zu lassen.
 `._pianoroll()` oder `._punchcard()`für Inline.
 Ebenso `.spectrum()`, `.pitchwheel()`, `scope()`, `spiral()`
 ### Arrangements
@@ -169,3 +172,14 @@ arrange(
 **Videos**
 - techno for crazy people: https://www.youtube.com/watch?v=HkgV_-nJOuE&t=190s
 - https://www.youtube.com/shorts/bucFM2nnVc8
+**Workshop-Template**
+- [advanced template](https://strudel.cc/#CgoKY29uc3QgY2hvcmRzID0gY2hvcmQoIjxDXjcgQTcgRG03IEc3PiIpLmRpY3QoJ2lyZWFsJykKLy9jb25zdCBjaG9yZHMgPSBjaG9yZCgiPEVtNyBBNyMxMSBEbTkgQ203PiIpLmRpY3QoJ2lyZWFsJykKLy9jb25zdCBjaG9yZHMgPSBjaG9yZCgiPEJtNyo0IEU3KjQgRyo0IEYjbTcqND4iKS5kaWN0KCdpcmVhbCcpLm1hc2soIlswIDAgMSAxXSIpCmNvbnN0IGJhc3MxID0gIjxbMCo2XSEyIFswKjRdIFsxIDIqNF0%2BIgpjb25zdCBiYXNzMiA9ICI8MCEzIFsxIDIqNF0%2BIgoKc2FtcGxlcygnZ2l0aHViOmVkZHlmbHV4L2NyYXRlJykKCnNldGNwbSgxNDAvNCkKLy8gLS0tLS0tLS0tLS0tLSBEcnVtcyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0KJDogcygiW2JkIGJkIFtiZCB8IFtiZCBiZF1dIGJkXSIpLmJhbmsoJ2NyYXRlJykKICAuZHVja29yYml0KCJbMl0gMCEzIikubGF0ZSgiWzAgLjAwXSoyIikuY29tcHJlc3NvcigiLTIwOjIwOjEwOi4wMDI6LjAyIikuZ2FpbiguNSkKJDogcygiPFt%2BIHNkIH4gc2RdW34gc2QgfiBbc2Qgc2RdXT4iKS5iYW5rKCdjcmF0ZScpLmR1Y2tvcmJpdCgyKS5yb29tKCJbWzAgfCAwLjVdIFsuMiAwXV0vMiIpLmdhaW4oMSkuY29tcHJlc3NvcigiLTIwOjIwOjEwOi4wMDI6LjAyIikucm9vbWxwKDEwMDApLmxwZigiNDAwMCA3MDAwIikKJDogcygiW1tbfiB%2BIGNwIH5dXSBbfiB%2BIH4gY3BdIH4gfl0qMC41IikuYmFuaygnUm9sYW5kVFI4MDgnKS5kdWNrb3JiaXQoMyw0KS5yb29tKCJbWzAgfCAwLjVdIFsuMiAwXV0vMiIpLmdhaW4oMC42KS5yb29tbHAoMTAwMCkubHBmKDUwMDApCiQ6IHMoIltoaCBoaCBoaCBvaF1baGggaGggb2ggaGhdIikuYmFuaygnY3JhdGUnKS5nYWluKC4zKQoKLy8gLS0tLS0tLS0tLS0tLSBTb21lIHdlaXJkIElkZWFzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLQpfJDogcygiaGgqMzIiKQogIC5zZWcoIjAgMjAwIikKICAuc3BlZWQoc2F3LnJhbmdlKC0yLDIpKS5ocGYoMTAwMCkubHBmKHNsaWRlcig1ODcwLDAsMTAwMDApKS5jcnVzaCgiPDggMTY%2BIikucm9vbWxwKDUwMCkucm9vbSgxMCkucG9zdGdhaW4oIlswIC4yXSo0IikucGFuKCJbLTEwIDEwXS8yIikub3JiaXQoNCkuZHVja2RlcHRoKDEpCgovLyAtLS0tLS0tLS0tLS0tIEhhcm1vbmllcyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0KJDogY2hvcmRzLm9mZnNldCgiPC0xIDAgMSAwPi80Iikudm9pY2luZygpLnMoImdtX2VwaWFubzE6MSIpLnJvb20oLjUpLmxwZigiPDMwMCAxMDAwIDIwMDAgMTUwMD4vMyIpLm9yYml0KDMpCiAgLmR1Y2tkZXB0aCgiPDMgLjI%2BIikKICAuZGlzdG9ydHR5cGUoJ2Rpb2RlJykuZGlzdG9ydCgiPDA6MSAxOi41IDI6LjM%2BIikuZ2FpbigwLjUpCgovLyAtLS0tLS0tLS0tLS0tIEJhc3MgLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiQ6IG4oYmFzczEpLnNldChjaG9yZHMpLm1vZGUoInJvb3Q6ZzIiKS52b2ljaW5nKCkucygiZ21fYWNvdXN0aWNfYmFzcyIpLmdhaW4oMSkucGVudigxKQogIC5kaXN0b3J0KCI8MCAyOi4zIDI6MC4yIDA%2BIikub3JiaXQoMikKCi8vIC0tLS0tLS0tLS0tLS0gTWVsb2RpZXMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tCl8kOiBjaG9yZHMudm9pY2luZygpLmFycCgiWzAgMSAyIDFdIikucygic2F3dG9vdGgiKS50cmVtc3luYyg0KS50cmVtb2xvcGhhc2UoLjI1KS5jcnVzaCgiPDUgND4iKS5scGYoc2xpZGVyKDE5MjQsMCw0MDAwKSkKXyQ6IG4oIjwwIDEgMCBbMiAwKjRdPiIpLnNldChjaG9yZHMpLm1vZGUoInJvb3Q6ZzYiKS52b2ljaW5nKCkucygiZ21fcGlhbm8iKS5nYWluKDEpLnBlbnYoLTUpLnJvb20oMSkuZ2FpbiguNSkuZGlzdG9ydCgiMjouNSIpCl8kOiBjaG9yZHMudm9pY2luZygpLmFycCgiWzEgMiA2XS8yKjMiKS5zKCJzcXVhcmUiKS50cmVtc3luYyg0KS50cmVtb2xvcGhhc2UoMCkudHJlbXNoYXBlKCd0cmknKQogIC5kaXN0b3J0KDEpLnBvc3RnYWluKC4zKQogIC8vLmxwZihzbGlkZXIoMTY5NiwwLDQwMDApKS5waGFzZXIoOCk%3D)
+- [short template](https://strudel.cc/#CgoKCmNvbnN0IGNob3JkcyA9IGNob3JkKCI8Q143IEE3IERtNyBHNz4iKQovL2NvbnN0IGNob3JkcyA9IGNob3JkKCI8RW03IEE3IzExIERtOSBDbTc%2BIikKLy9jb25zdCBjaG9yZHMgPSBjaG9yZCgiPEJtNyo0IEQ3KjQgRyo0IEYjbTcqND4iKS5tYXNrKCJbMSAwIDEgMV0iKQoKc2FtcGxlcygnZ2l0aHViOmVkZHlmbHV4L2NyYXRlJykKCnNldGNwbSgxNDAvNCkKLy8gLS0tLS0tLS0tLS0tLSBEcnVtcyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0KJDogcyhgPFtiZCBiZCBiZCBiZF0gICAgIFtiZCBiZCBiZCBiZF0%2BLAogICAgICA8W34gc2QgfiBbc2Qgc2RdXSAgW34gc2QgfiBzZF0%2BLAogICAgICA8ICAgIH4gICAgICAgICAgICAgW34gY3AgfiBbfiBjcF1dPmApLmJhbmsoImNyYXRlIikKCi8vIC0tLS0tLS0tLS0tLS0gSGFybW9uaWVzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLQokOiBjaG9yZHMub2Zmc2V0KCI8LTEgMCAxIDA%2BLzQiKS52b2ljaW5nKCkucygiZ21fZXBpYW5vMToxIikKCi8vIC0tLS0tLS0tLS0tLS0gQmFzcyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0KJDogbigiPDAhMyBbMSAyKjRdPiIpLnNldChjaG9yZHMpLm1vZGUoInJvb3Q6ZzIiKS52b2ljaW5nKCkucygiZ21fYWNvdXN0aWNfYmFzcyIpLnBlbnYoMSkKCi8vIC0tLS0tLS0tLS0tLS0gTWVsb2RpZXMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tCl8kOiBjaG9yZHMudm9pY2luZygpLmFycCgiWzAgMSAyIDFdIikucygic2F3dG9vdGgiKQokOiBuKCI8MCAxIDAgWzIgMCo0XT4iKS5zZXQoY2hvcmRzKS5tb2RlKCJyb290Omc2Iikudm9pY2luZygpLnMoImdtX3BpYW5vIikKXyQ6IGNob3Jkcy52b2ljaW5nKCkuYXJwKCJbMCAxIDBdKjQiKS5zKCJzdGVpbndheSIp)
+
+%% rooms
+orbits for nerds
+ducking
+chords?
+
+oft aktualisieren!!!
+repl settings %%
